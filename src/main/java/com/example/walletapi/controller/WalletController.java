@@ -35,13 +35,13 @@ public class WalletController {
 		return walletService.createWallet(walletId,intialBalance);
 		
 	}
-	// 2. Endpoint to fetch a wallet's details
-	@GetMapping("{walletId}")
-	public Wallet getWallet(@PathVariable String walletId) {
-		return walletService.getWallet(walletId)
-				.orElseThrow(()->new RuntimeException("walletId does not exist"+walletId));
-	}
-	
+	// Endpoint to fetch cached wallet balance
+		@GetMapping("/{walletId}/balance")
+		@Operation(summary = "Get wallet balance", description = "Fetches the current balance for a wallet using Redis caching.")
+		public ResponseEntity<BigDecimal> getBalance(@PathVariable String walletId) {
+			BigDecimal balance = walletService.getBalance(walletId);
+			return ResponseEntity.ok(balance);
+		}
 	
 	
 	@PostMapping("/transfer")

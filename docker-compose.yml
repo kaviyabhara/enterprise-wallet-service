@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  wallet-mysql-db:
+    image: mysql:8.0
+    container_name: wallet-mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: walletdb
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - wallet-network
+
+  wallet-redis:
+    image: redis:7.0-alpine
+    container_name: wallet-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - wallet-network
+
+  wallet-api-service:
+    build: .
+    container_name: wallet-api-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      wallet-mysql-db:
+        condition: service_healthy
+      wallet-redis:
+        condition: service_started
+    networks:
+      - wallet-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: wallet-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - wallet-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: wallet-grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - wallet-network
+
+networks:
+  wallet-network:
+    driver: bridge

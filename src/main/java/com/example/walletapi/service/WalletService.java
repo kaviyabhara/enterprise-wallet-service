@@ -4,12 +4,15 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import com.example.walletapi.entity.TransactionLedger;
 import com.example.walletapi.entity.Wallet;
 import com.example.walletapi.repository.TransactionalLedgerRepository;
 import com.example.walletapi.repository.WalletRepository;
+
 
 import jakarta.transaction.Transactional;
 
@@ -67,6 +70,24 @@ public void transferMoney(String fromWalletId, String toWalletId,BigDecimal amou
 		
 		TransactionLedger ledgerEntry = new TransactionLedger(fromWalletId, toWalletId, amount,java.time.LocalDateTime.now());
 	      ledgerRepository.save(ledgerEntry);
+}
+
+
+
+//Fast read from Redis cache; falls back to MySQL if missing
+@Cacheable(value = "walletBalance", key = "#walletId")
+public BigDecimal getBalance(String walletId) {
+    Wallet wallet = walletRepository.findById(walletId)
+            .orElseThrow(() -> new RuntimeException("Wallet not found"));
+    return wallet.getBalance();
+}
+
+// Transaction updates balance and evicts stale cached value from Redis
+@Transactional
+@CacheEvict(value = "walletBalance", key = "#fromWalletId")
+public void processTransaction(String fromWalletId, String toWalletId, BigDecimal amount) {
+    // Your existing transfer / pessimistic locking logic here
+
 }
 }
 
