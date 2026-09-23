@@ -1,4 +1,72 @@
-# Enterprise Wallet API Service
+# High-Throughput Financial Wallet Microservice
+
+A production-ready, concurrent-safe financial wallet API built with Spring Boot, MySQL, and Redis, featuring full-stack observability via Prometheus and Grafana.
+
+---
+
+## 🏗 System Architecture & Key Features
+
+* **Concurrency Safety & Data Integrity:** Implemented MySQL pessimistic write-locking (`PESSIMISTIC_WRITE`) with deterministic lock ordering to guarantee zero double-spending or deadlocks under concurrent transfers.
+* **Low-Latency Distributed Caching:** Integrated Redis with `@Cacheable` and `@CacheEvict` for sub-millisecond balance lookups while maintaining cache consistency during transactions.
+* **Containerized Infrastructure & Health Dependency:** Fully dockerized application stack using Docker Compose with MySQL health checks (`service_healthy`) to resolve container startup race conditions and cold-start failures.
+* **Real-Time Observability:** Configured Spring Boot Actuator and Micrometer to export metrics scraped every 5s by Prometheus and visualized in Grafana (Dashboard ID: `11378`), tracking JVM heap memory, HikariCP connection pool usage, and HTTP request rates.
+
+---
+
+## 🛠 Tech Stack
+
+* **Backend Framework:** Java 17, Spring Boot 4.1.0
+* **Persistence & Database:** Spring Data JPA, Hibernate, MySQL 8.0
+* **Caching Layer:** Redis 7.0-alpine
+* **Monitoring & Metrics:** Spring Boot Actuator, Micrometer, Prometheus, Grafana
+* **Containerization:** Docker, Docker Compose
+
+---
+
+## 🚀 Quick Start Guide
+
+### Prerequisites
+* Docker Desktop installed and running.
+
+### 1. Clone & Spin Up Containers
+```bash
+git clone [https://github.com/kaviyabhara/enterprise-wallet-service.git](https://github.com/kaviyabhara/enterprise-wallet-service.git)
+cd enterprise-wallet-service
+docker compose up -d# High-Throughput Financial Wallet Microservice
+
+A production-ready, concurrent-safe financial wallet API built with Spring Boot, MySQL, and Redis, featuring full-stack observability via Prometheus and Grafana.
+
+---
+
+## 🏗 System Architecture & Key Features
+
+* **Concurrency Safety & Data Integrity:** Implemented MySQL pessimistic write-locking (`PESSIMISTIC_WRITE`) with deterministic lock ordering to guarantee zero double-spending or deadlocks under concurrent transfers.
+* **Low-Latency Distributed Caching:** Integrated Redis with `@Cacheable` and `@CacheEvict` for sub-millisecond balance lookups while maintaining cache consistency during transactions.
+* **Containerized Infrastructure & Health Dependency:** Fully dockerized application stack using Docker Compose with MySQL health checks (`service_healthy`) to resolve container startup race conditions and cold-start failures.
+* **Real-Time Observability:** Configured Spring Boot Actuator and Micrometer to export metrics scraped every 5s by Prometheus and visualized in Grafana (Dashboard ID: `11378`), tracking JVM heap memory, HikariCP connection pool usage, and HTTP request rates.
+
+---
+
+## 🛠 Tech Stack
+
+* **Backend Framework:** Java 17, Spring Boot 4.1.0
+* **Persistence & Database:** Spring Data JPA, Hibernate, MySQL 8.0
+* **Caching Layer:** Redis 7.0-alpine
+* **Monitoring & Metrics:** Spring Boot Actuator, Micrometer, Prometheus, Grafana
+* **Containerization:** Docker, Docker Compose
+
+---
+
+## 🚀 Quick Start Guide
+
+### Prerequisites
+* Docker Desktop installed and running.
+
+### 1. Clone & Spin Up Containers
+```bash
+git clone [https://github.com/kaviyabhara/enterprise-wallet-service.git](https://github.com/kaviyabhara/enterprise-wallet-service.git)
+cd enterprise-wallet-service
+docker compose up -d# Enterprise Wallet API Service
 
 A robust, production-ready RESTful API built with **Spring Boot** and **Java 17** for managing digital wallet transactions. Designed to handle high-concurrency wallet operations safely with pessimistic locking, double-entry audit logging, and automated API documentation.
 
